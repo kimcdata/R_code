@@ -1,0 +1,14 @@
+#Add your changed files to the repository staging area
+
+git add [YOUFILE]
+git add .
+
+#Add a new commit with a description message of the work that was done
+
+git commit -m "added this and that to the repo"
+
+#Push changed files to the remote
+
+git push
+
+
