@@ -1,0 +1,15 @@
+### R PACKAGES 14.12.2017 ###
+
+dplyr
+ggplot2
+data.table
+preprocessCore
+NanoStringDiff
+marray
+gplots
+survival
+RTN
+limma
+QuantPsyc
+clinfun
+subprocess
