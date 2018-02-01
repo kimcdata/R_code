@@ -75,7 +75,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 
     print("convering symbols to entrez IDs")    
 
-    gene = bitr(gene.list, fromType="SYMBOL",toType="ENTREZID",OrgDb=organism.db)[,2]
+    gene = bitr(gene.list, fromType="SYMBOL",toType="ENTREZID",OrgDb=organism.db)$
     str(gene)
   } else if(id_type == "entrez"){
     gene = gene.list
