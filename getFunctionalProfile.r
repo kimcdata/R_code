@@ -65,15 +65,21 @@
 #					writeTable=TRUE,
 #					filename="mouse.up.full.functional.profile.txt")
 
-getFunctionalProfile <- function(gene.list, universe, organism = organism, organism.db = organism.db, golevels=TRUE,writeTable=TRUE, filename=filename, pvalue = 1, qvalue = 1, p.adjust.method="BH",kegg.organism="mmu",id_type = "symbol", minGSSize = 1, maxGSSize = 50000, kegg=T, kegg2symbol=T){
+getFunctionalProfile <- function(gene.list, universe, organism = organism, organism.db = organism.db, golevels=TRUE,writeTable=TRUE, filename=filename, pvalue = 1, qvalue = 1, p.adjust.method="BH",kegg.organism="hsa",id_type = "symbol", minGSSize = 1, maxGSSize = 50000, kegg=T, kegg2symbol=T){
   
   library(clusterProfiler)
   library(GO.db)
   eval(parse(text=paste("require(",organism.db,")",sep="")))
+
   if(id_type == "symbol"){
+
+    print("convering symbols to entrez IDs")    
+
     gene = bitr(gene.list, fromType="SYMBOL",toType="ENTREZID",OrgDb=organism.db)[,2]
+    str(gene)
   } else if(id_type == "entrez"){
     gene = gene.list
+    
   } else {
     print("please use 'symbol' or 'entrez' for id_type")
     return(0)
@@ -83,7 +89,10 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
   
   if(!missing(universe)){
     if(id_type == "symbol"){
+
+      print("converting universe symbols to entrez IDs")
       universe = bitr(universe, fromType="SYMBOL",toType="ENTREZID",OrgDb=organism.db)[,2]
+      str(universe)
     } else if(id_type == "entrez"){
      universe = universe
     } else {
@@ -91,7 +100,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
       return(0)
     }
 
-    
+    print("BP")
     # get Biological Process (BP) GO term enrichment
     enrichGO(gene = gene, 
              universe=universe, 
@@ -105,6 +114,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
              maxGSSize = maxGSSize) -> ego_bp
     
     # get Cellular Component (CC) GO term enrichment
+    print("CC")
     enrichGO(gene = gene, 
              universe=universe, 
              OrgDb=organism.db,
@@ -117,6 +127,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
              maxGSSize = maxGSSize) -> ego_cc
     
     # get Molecular Function (MF) GO term enrichment
+    print("MF")
     enrichGO(gene = gene, 
              universe=universe, 
              OrgDb=organism.db,
@@ -207,6 +218,8 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
     
       ekegg$geneID <- sapply(ekegg$geneID, function(x){
   	    glk <- unlist(strsplit(x, "/"))
+
+        print("converting KEGG IDs back to symbols")
         gls <- bitr(geneID = glk,fromType = "ENTREZID",toType = "SYMBOL",OrgDb = organism.db,drop = T)[,2]
         gll <- paste(gls, collapse = "/")
       })
