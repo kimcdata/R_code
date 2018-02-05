@@ -1,17 +1,11 @@
-gene_expression_file = "~/cbf-fs/CLL_correlation_network/GSE21029_expression_mat.txt"
-target_file = "Overlapping.genes.selected.SNPs.txt"
-target_pathways_file = "target_pathways.txt"
-source("~/R_code/getFunctionalProfile.r")
-mat2sif_file = "~/Python/mat2sif.0.2-hubs.py"
 
 require(data.table)
 require(clusterProfiler)
+source("~/R_code/getFunctionalProfile.r")
 
 # function to return resampled matrix data in melted format
 
 corrMatResample = function(expr_data, melt_data = T){
-
-	require(data.table)
 	
 	#################### RANDOMISE DATA FOR RESAMPLING PROCEDURE ####################
 
@@ -178,8 +172,6 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	##################### PERFORM FUNCTIONAL ANALYSIS ON UNIQUE GENES IN EACH NETWORK ########################
 
-	source("~/R_code/getFunctionalProfile.r")
-
 	functional_profiles = sapply(target_genes_harm, function(x){
 
 		getFunctionalProfile(gene.list = neighbours[[x]], universe = rownames(expr_data), filename = paste0(results_dir,"/Functional.profile.",x,".txt"), organism.db = "org.Hs.eg.db", organism = "human", golevels = F, kegg.organism = "hsa")
@@ -227,27 +219,21 @@ diffCorrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pa
 
 	####################### LOAD GENE EXPRESSION MATRIX ###########################
 
-	expr_data = read.delim(gene_expression_file, row.names=1)
-	expr_data = expr_data[,grep("Lymph", colnames(expr_data))]
+	expr_data_A = read.delim(gene_expression_file_A, row.names=1)
+	epxr_data_B = read.delim(gene_expression_file_B, row.names=1)
 
 	###################### SUBSET MATRIX FOR TARGET GENES #########################
 
 	target_genes = read.delim(target_file, stringsAsFactors=F)
 	target_genes_harm = intersect(rownames(expr_data), target_genes[,1])
 
-	expr_data_subset = expr_data[target_genes_harm,]
-
 	str(expr_data_subset)
 
-	##################### CREATE CORRELATION MATRIX ##############################
-
-	cor_mat = apply(expr_data_subset, 1, function(x){
-
-		result = cor(x, t(expr_data), method="spearman")
-
-	})
-
-	rownames(cor_mat) = rownames(expr_data)
+	########################### CREATE DIFFERENTIAL CORRELATION MATRIX ##############################
+	
+	diff_cor_mat = diffCor(expr_data_A, expr_data_B)
+	
+	cor_mat = diff_cor_mat[target_genes_harm,]
 
 	print("cor mat") 
 	str(cor_mat)
@@ -261,15 +247,15 @@ diffCorrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pa
 
 	write.table(cor_mat, file="correlation_matrix.txt", sep="\t", quote=F, col.names=NA)
 
-	cor_rand = corrMatResample(expr_data, melt = T)
-		
+	
 	#################### CALCULATE MEAN/SD OF CORRELATION VALUES FROM RANDOMISED DATA #####################
 
+	cor_rand = diffCorrMatResample(expr_data_A, expr_data_B, melt = T)
+	
 	cor_rand_mean = mean(cor_rand$value)
 	cor_rand_sd = sd(cor_rand$value)
 
 	cor_mat_melt = corrMatPnorm(cor_rand_mean, cor_rand_sd, cor_mat_melt)
-	
 
 	print("cor mat melt")
 	str(cor_mat_melt)
@@ -317,8 +303,6 @@ diffCorrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pa
 
 
 	##################### PERFORM FUNCTIONAL ANALYSIS ON UNIQUE GENES IN EACH NETWORK ########################
-
-	source("~/R_code/getFunctionalProfile.r")
 
 	functional_profiles = sapply(target_genes_harm, function(x){
 
