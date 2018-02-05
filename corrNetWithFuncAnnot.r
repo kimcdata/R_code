@@ -41,7 +41,7 @@ return(AB_resample_corrdiff)
 
 # calculate differential correlation matrix
 
-diffCor(data_a, data_b, method="spearman"){
+diffCor = function(data_a, data_b, method="spearman"){
 
 cor_a = cor(t(data_a), method = method)
 cor_b = cor(t(data_b), method = method)
