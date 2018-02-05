@@ -16,7 +16,9 @@ corrMatResample = function(expr_data, melt_data = T){
 		cor_rand = melt(cor_rand, na.rm = T)
 		return(cor_rand)
 	} else {
-		return(cor_rand)	
+		cor_mean = mean(cor_rand[upper.tri(cor_rand, diag = F)])
+		cor_sd = sd(cor_rand[upper.tri(cor_rand, diag = F)])
+		return(c(mean = cor_mean, sd = cor_sd))	
 	}
 }
 
@@ -347,6 +349,3 @@ diffCorrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pa
 }
 
 
-test = function(x){
-	print(x)
-	}
