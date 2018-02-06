@@ -220,7 +220,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
   	    glk <- unlist(strsplit(x, "/"))
 
         
-        gls <- bitr(geneID = glk,fromType = "ENTREZID",toType = "SYMBOL",OrgDb = organism.db,drop = T)[,2]
+        gls <- bitr2(geneID = glk,fromType = "ENTREZID",toType = "SYMBOL",OrgDb = organism.db,drop = T)[,2]
         gll <- paste(gls, collapse = "/")
       })
       
