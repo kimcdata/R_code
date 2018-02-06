@@ -93,6 +93,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	expr_data_subset = expr_data[target_genes_harm,]
 
+	print("READ DATA")
 	str(expr_data_subset)
 
 	##################### CREATE CORRELATION MATRIX ##############################
@@ -105,12 +106,12 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	rownames(cor_mat) = rownames(expr_data)
 
-	print("cor mat") 
+	print("CORRELATION MATRIX") 
 	str(cor_mat)
 
 	cor_mat_melt = melt(cor_mat, variable.factor = F)
 
-	print("cor mat melt")
+	print("CORRELATION MATRIX - MELTED")
 	str(cor_mat_melt)
 
 	#################### WRITE CORRELATION MATRIX TO FILE ########################
@@ -127,7 +128,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 	cor_mat_melt = corrMatPnorm(cor_rand_mean, cor_rand_sd, cor_mat_melt)
 	
 
-	print("cor mat melt")
+	print("CORRELATION MATRIX WITH STATS - MELTED")
 	str(cor_mat_melt)
 
 
@@ -145,7 +146,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 		corr_thresh = min(abs(cor_mat_melt$value[sig]))
 	}
 
-	str(corr_thresh)
+	print ("CORRELATION THRESHOLD")
 
 	###################### CREATE NETWORKS FROM CORRELATION MATRIX ##########################
 
@@ -155,7 +156,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	networks = read.delim("correlation_networks.sif.txt", header=F,stringsAsFactors=F)
 
-	print("networks")
+	print("NETWORKS")
 	str(networks)
 
 	neighbours = sapply(target_genes_harm, function(x){
@@ -167,19 +168,23 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	})
 
-	print("neighbours")
+	print("NEIGHBOURS")
 	str(neighbours)
 
 
 
 	##################### PERFORM FUNCTIONAL ANALYSIS ON UNIQUE GENES IN EACH NETWORK ########################
 
+	cat("\nFUNCTIONAL PROFILES STARTED\n\n\n")
+	
 	functional_profiles = sapply(target_genes_harm, function(x){
 
 		getFunctionalProfile(gene.list = neighbours[[x]], universe = rownames(expr_data), filename = paste0(results_dir,"/Functional.profile.",x,".txt"), organism.db = "org.Hs.eg.db", organism = "human", golevels = F, kegg.organism = "hsa")
 
 	})
 
+	cat("\nFUNCTIONAL PROFILES COMPLETED\n\n")
+	
 	##################### EXTRACT TARGET PATHWAYS ##########################
 
 	target_pathways = as.character(read.delim(target_pathways_file, header=F, stringsAsFactors=F)[,1])
@@ -214,6 +219,9 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 		write.table(t(to_write), file = paste0(results_dir,"/Target.pathway.",p,".enrichment.scores.stxt"), quote=F, sep = "\t", col.names=NA)
 
 	}
+	
+	cat("\nPATHWAY TABLES WRITTEN TO FILE\n\n")
+	
 }
 
 
