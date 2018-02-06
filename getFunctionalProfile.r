@@ -215,11 +215,11 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
     cbind(Category = rep("KEGG",nrow(ekegg)),ekegg) -> ekegg
   
     if(kegg2symbol){
-    
-      ekegg$geneID <- sapply(ekegg$geneID, function(x){
+		print("converting KEGG IDs back to symbols")
+		ekegg$geneID <- sapply(ekegg$geneID, function(x){
   	    glk <- unlist(strsplit(x, "/"))
 
-        print("converting KEGG IDs back to symbols")
+        
         gls <- bitr(geneID = glk,fromType = "ENTREZID",toType = "SYMBOL",OrgDb = organism.db,drop = T)[,2]
         gll <- paste(gls, collapse = "/")
       })
