@@ -179,6 +179,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 	
 	functional_profiles = sapply(target_genes_harm, function(x){
 
+		cat(paste0("\n\nFUNCTIONAL ANALYSIS GENE: ",x,"\n\n"))
 		getFunctionalProfile(gene.list = neighbours[[x]], universe = rownames(expr_data), filename = paste0(results_dir,"/Functional.profile.",x,".txt"), organism.db = "org.Hs.eg.db", organism = "human", golevels = F, kegg.organism = "hsa")
 
 	})
