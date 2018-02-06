@@ -217,7 +217,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 }
 
 
-diffCorrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathways_file, python_script_file, fdr = 0.1, results_dir = "results"){
+diffCorrNetWithFuncAnnot = function(gene_expression_file_A, gene_expression_file_B, target_file, target_pathways_file, python_script_file, fdr = 0.1, results_dir = "results"){
 
 	####################### LOAD GENE EXPRESSION MATRIX ###########################
 
