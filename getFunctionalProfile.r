@@ -287,10 +287,9 @@ distance_to_root <- function(goterm, ont, jumps=0){
 
 }
 
-
-
 bitr2 = function (geneID, fromType, toType, OrgDb, drop = TRUE) 
 {
+	require(GOSemSim)
 	idTypes <- idType(OrgDb)
 	msg <- paste0("should be one of ", paste(idTypes, collapse = ", "), 
 	".")
