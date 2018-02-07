@@ -241,6 +241,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 	for(p in names(path_tables)){
 
 		to_write = path_tables[[p]]
+		rownames(to_write) = target_genes_harm
 		str(to_write)
 
 		write.table(t(to_write), file = paste0(results_dir,"/Target.pathway.",p,".enrichment.scores.txt"), quote=F, sep = "\t", col.names=NA)
