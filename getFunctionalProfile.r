@@ -201,6 +201,9 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 			use_internal_data = FALSE,
 			minGSSize = minGSSize,
 			maxGSSize = maxGSSize) -> ekegg
+			if(is.null(ekegg)){
+				kegg = FALSE
+				}
 		}
 		
 	}
