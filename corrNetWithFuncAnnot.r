@@ -11,17 +11,22 @@ corrMatResample = function(expr_data, melt_data = FALSE){
 
 	print("RANDOMISING DATA")
 	cor_rand = cor(t(apply(expr_data, 2, sample)), method="spearman")
-	print("REMOVING UPPER TRIANGLE AND DIAGONAL")
-	cor_rand[upper.tri(cor_rand, diag = T)] = NA
 	
 	if(melt_data){
 		print("MELTING RANDOMISED CORRELATION MATRIX")
+		print("REMOVING UPPER TRIANGLE AND DIAGONAL")
+		cor_rand[upper.tri(cor_rand, diag = T)] = NA
 		cor_rand = melt(cor_rand, na.rm = T)
+		print("MELTED")
 		return(cor_rand)
 	} else {
 		print("CALCULATING MEAN AND SD")
 		cor_mean = mean(cor_rand[upper.tri(cor_rand, diag = F)])
+		print("COR MEAN")
+		print(cor_mean)
 		cor_sd = sd(cor_rand[upper.tri(cor_rand, diag = F)])
+		print("COR SD")
+		print(cor_sd)
 		return(c(mean = cor_mean, sd = cor_sd))	
 	}
 }
