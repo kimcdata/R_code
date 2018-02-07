@@ -13,6 +13,7 @@ corrMatResample = function(expr_data, melt_data = F){
 	cor_rand[upper.tri(cor_rand, diag = T)] = NA
 	
 	if(melt_data){
+		print("MELTING RANDOMISED CORRELATION MATRIX")
 		cor_rand = melt(cor_rand, na.rm = T)
 		return(cor_rand)
 	} else {
