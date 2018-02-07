@@ -5,11 +5,13 @@ source("~/R_code/getFunctionalProfile.r")
 
 # function to return resampled matrix data in melted format
 
-corrMatResample = function(expr_data, melt_data = F){
+corrMatResample = function(expr_data, melt_data = FALSE){
 	
 	#################### RANDOMISE DATA FOR RESAMPLING PROCEDURE ####################
 
+	print("RANDOMISING DATA")
 	cor_rand = cor(t(apply(expr_data, 2, sample)), method="spearman")
+	print("REMOVING UPPER TRIANGLE AND DIAGONAL")
 	cor_rand[upper.tri(cor_rand, diag = T)] = NA
 	
 	if(melt_data){
@@ -17,6 +19,7 @@ corrMatResample = function(expr_data, melt_data = F){
 		cor_rand = melt(cor_rand, na.rm = T)
 		return(cor_rand)
 	} else {
+		print("CALCULATING MEAN AND SD")
 		cor_mean = mean(cor_rand[upper.tri(cor_rand, diag = F)])
 		cor_sd = sd(cor_rand[upper.tri(cor_rand, diag = F)])
 		return(c(mean = cor_mean, sd = cor_sd))	
@@ -119,7 +122,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	write.table(cor_mat, file="correlation_matrix.txt", sep="\t", quote=F, col.names=NA)
 
-	cor_rand_mean_sd = corrMatResample(expr_data, melt_data = F)
+	cor_rand_mean_sd = corrMatResample(expr_data, melt_data = FALSE)
 		
 	#################### CALCULATE MEAN/SD OF CORRELATION VALUES FROM RANDOMISED DATA #####################
 
