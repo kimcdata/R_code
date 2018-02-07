@@ -154,6 +154,12 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 			minGSSize = minGSSize,
 			maxGSSize = maxGSSize,
 			pAdjustMethod = "BH") -> ekegg
+			cat("\n\nEKEGG\n\n")
+			str(ekegg)
+			cat("\n\nEKEGG\n\n")
+			if(is.null(ekegg)){
+				kegg = FALSE
+			}
 		}
 		
 	} else { 
