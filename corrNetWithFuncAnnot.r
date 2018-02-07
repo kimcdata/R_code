@@ -168,7 +168,11 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	})
 
-	print("NEIGHBOURS")
+	neighbours_length = sapply(neighbours, length)
+	cat("\n\nNEIGHBOURS LENGTH\n\n")
+	print(neighbours_length)
+
+	cat("\n\nNEIGHBOURS\n\n")
 	str(neighbours)
 
 
