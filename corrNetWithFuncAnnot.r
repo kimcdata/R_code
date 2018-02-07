@@ -118,12 +118,12 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	write.table(cor_mat, file="correlation_matrix.txt", sep="\t", quote=F, col.names=NA)
 
-	cor_rand = corrMatResample(expr_data, melt = T)
+	cor_rand_mean_sd = corrMatResample(expr_data, melt = F)
 		
 	#################### CALCULATE MEAN/SD OF CORRELATION VALUES FROM RANDOMISED DATA #####################
 
-	cor_rand_mean = mean(cor_rand$value)
-	cor_rand_sd = sd(cor_rand$value)
+	cor_rand_mean = cor_rand_mean_sd["mean"]
+	cor_rand_sd = cor_rand_mean_sd["sd"]
 
 	cor_mat_melt = corrMatPnorm(cor_rand_mean, cor_rand_sd, cor_mat_melt)
 	
