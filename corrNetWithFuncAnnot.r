@@ -5,7 +5,7 @@ source("~/R_code/getFunctionalProfile.r")
 
 # function to return resampled matrix data in melted format
 
-corrMatResample = function(expr_data, melt_data = T){
+corrMatResample = function(expr_data, melt_data = F){
 	
 	#################### RANDOMISE DATA FOR RESAMPLING PROCEDURE ####################
 
@@ -118,7 +118,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	write.table(cor_mat, file="correlation_matrix.txt", sep="\t", quote=F, col.names=NA)
 
-	cor_rand_mean_sd = corrMatResample(expr_data, melt = F)
+	cor_rand_mean_sd = corrMatResample(expr_data, melt_data = F)
 		
 	#################### CALCULATE MEAN/SD OF CORRELATION VALUES FROM RANDOMISED DATA #####################
 
@@ -183,9 +183,17 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 	
 	functional_profiles = lapply(target_genes_harm, function(x){
 
-		cat(paste0("\n\nFUNCTIONAL ANALYSIS GENE: ",x,"\n\n"))
-		getFunctionalProfile(gene.list = neighbours[[x]], universe = rownames(expr_data), filename = paste0(results_dir,"/Functional.profile.",x,".txt"), organism.db = "org.Hs.eg.db", organism = "human", golevels = F, kegg.organism = "hsa")
+		if(length(neighbours[[x]]) > 0){
+			cat(paste0("\n\nFUNCTIONAL ANALYSIS GENE: ",x,"\n\n"))
+			return(getFunctionalProfile(gene.list = neighbours[[x]], universe = rownames(expr_data), filename = paste0(results_dir,"/Functional.profile.",x,".txt"), organism.db = "org.Hs.eg.db", organism = "human", golevels = F, kegg.organism = "hsa"))
+		} else {
 
+			cat(paste0("\n\nGENE: ",x," HAS NO NEIGHBOURS\n\n"))
+			res = matrix(NA, ncol = 10, nrow = 1)
+			colnames(res) = c("Category","ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count")
+			return(res)
+
+		}
 	})
 
 	save(functional_profiles, file = "functional.profiles.current.run.RData")
