@@ -184,6 +184,8 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	})
 
+	save(functional_profiles, file = "functional.profiles.current.run.RData")
+
 	cat("\nFUNCTIONAL PROFILES COMPLETED\n\n")
 	
 	##################### EXTRACT TARGET PATHWAYS ##########################
@@ -195,7 +197,10 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	for(p in target_pathways){
 
+		cat(paste0("\nPATHWAY: ",p,"\n\n"))
+
 		path_tables[[p]] = sapply(functional_profiles, function(f){
+			str(f)
 			search = f$Description == p
 			if(any(search)){
 				res = f[search,target_columns]
