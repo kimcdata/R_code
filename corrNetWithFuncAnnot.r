@@ -162,6 +162,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	if(length(which(sig)) < minimum_hits){
 		corr_thresh = corrPercentileThresh(expr_data, perc = 99) 
+		writeLines(as.character(corr_thresh), con = paste0(results_dir, "/correlation_threshold.txt"))
 	} else {
 		corr_thresh = min(abs(cor_mat_melt$value[sig]))
 	}
