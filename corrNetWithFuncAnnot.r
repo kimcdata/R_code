@@ -125,7 +125,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	#################### WRITE CORRELATION MATRIX TO FILE ########################
 
-	write.table(cor_mat, file="correlation_matrix.txt", sep="\t", quote=F, col.names=NA)
+	write.table(cor_mat, file=paste0(results_dir,"/correlation_matrix.txt"), sep="\t", quote=F, col.names=NA)
 
 	cor_rand_mean_sd = corrMatResample(expr_data, melt_data = FALSE)
 		
@@ -159,11 +159,11 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	###################### CREATE NETWORKS FROM CORRELATION MATRIX ##########################
 
-	system(paste('python ', python_script_file,' -i correlation_matrix.txt -o correlation_networks.sif.txt -t ', corr_thresh, sep=""))
+	system(paste0('python ', python_script_file,' -i ', results_dir, '/correlation_matrix.txt -o ', results_dir, '/correlation_networks.sif.txt -t ', corr_thresh))
 
 	###################### LOAD NETWORKS IN R ###########################
 
-	networks = read.delim("correlation_networks.sif.txt", header=F,stringsAsFactors=F)
+	networks = read.delim(paste0(results_dir,"/correlation_networks.sif.txt"), header=F,stringsAsFactors=F)
 
 	print("NETWORKS")
 	str(networks)
@@ -205,7 +205,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 		}
 	})
 
-	save(functional_profiles, file = "functional.profiles.current.run.RData")
+	save(functional_profiles, file = paste0(results_dir,"/functional.profiles.current.run.RData"))
 
 	cat("\nFUNCTIONAL PROFILES COMPLETED\n\n")
 	
