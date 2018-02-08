@@ -88,8 +88,19 @@ corrMatPnorm = function(cor_rand_mean, cor_rand_sd, cor_real_melt, p.adjust.meth
 
 }
 
+# fetch a percentile based threshold for correlation
 
-corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathways_file, python_script_file, fdr = 0.1, results_dir = "results"){
+corrPercentileThresh = function(expr_data, perc = 99){
+
+cormat = cor(t(expr_data))
+perc_str = paste0(perc,".0%")
+thresh = quantile(abs(cormat[upper.tri(cormat, diag=F)]), probs = seq(0,1,length.out=201))[perc_str]
+return(thresh)
+
+}
+
+
+corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathways_file, python_script_file, fdr = 0.1, alt_thresh = 0.7, results_dir = "results"){
 
 	####################### LOAD GENE EXPRESSION MATRIX ###########################
 
@@ -150,7 +161,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 	minimum_hits = 100
 
 	if(length(which(sig)) < minimum_hits){
-		corr_thresh = 0.7
+		corr_thresh = corrPercentileThresh(expr_data, perc = 99) 
 	} else {
 		corr_thresh = min(abs(cor_mat_melt$value[sig]))
 	}
