@@ -100,6 +100,29 @@ return(thresh)
 }
 
 
+# get node degree from a sif format file
+
+networkDegreeFromSif = function(file, targets){
+
+networks = read.delim(file, header=F,stringsAsFactors=F)
+
+neighbours = sapply(targets, function(x){
+
+	r1 = which(networks[,1] == x)
+	r2 = which(networks[,2] == x)
+	neighbours = unique(c(networks[r1,2],networks[r2,1]))
+	return(neighbours)
+
+})
+
+neighbours_length = sapply(neighbours, length)
+
+return(neighbours_length)
+
+}
+
+
+
 corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathways_file, python_script_file, fdr = 0.1, alt_thresh = 0.7, results_dir = "results"){
 
 	####################### LOAD GENE EXPRESSION MATRIX ###########################
