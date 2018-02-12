@@ -248,14 +248,13 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		
 	}
 
-
-	ego_bp@result -> bp
+	if(!is.null(ego_bp)) { ego_bp@result -> bp } else { bp = ego_bp }
 	cbind(Category = as.character(rep("BP",nrow(bp))),bp) -> bp
 
-	ego_cc@result -> cc
+	if(!is.null(ego_cc)) { ego_cc@result -> cc } else { cc = ego_cc }
 	cbind(Category = as.character(rep("CC",nrow(cc))),cc) -> cc
 
-	ego_mf@result -> mf
+	if(!is.null(ego_mf)) { ego_mf@result -> mf } else { mf = ego_mf }
 	cbind(Category = as.character(rep("MF",nrow(mf))),mf) -> mf
 
 	if(kegg){
