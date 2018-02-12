@@ -72,6 +72,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 	library(clusterProfiler)
 	library(GO.db)
 	eval(parse(text=paste("require(",organism.db,")",sep="")))
+	table_colnames =  c("Category	ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count")
 
 	if(id_type == "symbol"){
 
@@ -79,6 +80,15 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 
 		gene = bitr(gene.list, fromType="SYMBOL",toType="ENTREZID",OrgDb=organism.db)[,2]
 		str(gene)
+		if(length(gene < 1)){
+		
+		cat("\n\nNO GENES COULD BE CONVERTED TO ENTREZ SYMBOLS\n\n")
+		
+		result = matrix(NA, nrow = 1, ncol = 10)
+		colnames(result) = tables_colnames
+		return(result)
+				
+		}
 	} else if(id_type == "entrez"){
 		gene = gene.list
 		
@@ -116,6 +126,13 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		minGSSize = minGSSize,
 		maxGSSize = maxGSSize) -> ego_bp
 		
+		if(is.null(ego_bp)){
+		
+		ego_bp = matrix(NA, nrow = 0, ncol = 10)
+		colnames(ego_bp) = tables_colnames
+		
+		}
+		
 		# get Cellular Component (CC) GO term enrichment
 		print("CC")
 		enrichGO(gene = gene, 
@@ -129,6 +146,13 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		minGSSize = minGSSize,
 		maxGSSize = maxGSSize) -> ego_cc
 		
+		if(is.null(ego_cc)){
+		
+		ego_cc = matrix(NA, nrow = 0, ncol = 10)
+		colnames(result) = tables_colnames
+		
+		}
+		
 		# get Molecular Function (MF) GO term enrichment
 		print("MF")
 		enrichGO(gene = gene, 
@@ -141,6 +165,13 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		readable=TRUE,
 		minGSSize = minGSSize,
 		maxGSSize = maxGSSize) -> ego_mf
+		
+		if(is.null(ego_mf)){
+		
+		ego_mf = matrix(NA, nrow = 0, ncol = 10)
+		colnames(result) = tables_colnames
+		
+		}
 		
 		# get KEGG term enrichment
 		if(kegg){
