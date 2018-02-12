@@ -129,7 +129,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		if(is.null(ego_bp)){
 		
 		ego_bp = matrix(NA, nrow = 0, ncol = 10)
-		colnames(ego_bp) = tables_colnames
+		colnames(ego_bp) = table_colnames
 		
 		}
 		
@@ -149,7 +149,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		if(is.null(ego_cc)){
 		
 		ego_cc = matrix(NA, nrow = 0, ncol = 10)
-		colnames(result) = tables_colnames
+		colnames(result) = table_colnames
 		
 		}
 		
@@ -169,7 +169,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		if(is.null(ego_mf)){
 		
 		ego_mf = matrix(NA, nrow = 0, ncol = 10)
-		colnames(result) = tables_colnames
+		colnames(result) = table_colnames
 		
 		}
 		
