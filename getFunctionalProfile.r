@@ -72,7 +72,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 	library(clusterProfiler)
 	library(GO.db)
 	eval(parse(text=paste("require(",organism.db,")",sep="")))
-	table_colnames =  c("Category	ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count")
+	table_colnames =  c("Category","ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count")
 
 	if(id_type == "symbol"){
 
