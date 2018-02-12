@@ -123,7 +123,7 @@ return(neighbours_length)
 
 
 
-corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathways_file, python_script_file, fdr = 0.1, alt_thresh = 0.7, results_dir = "results", thresh_perc = F, thresh_perc_value = 99){
+corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathways_file, python_script_file, fdr = 0.1, alt_thresh = 0.7, results_dir = "results", thresh_perc = F, thresh_perc_value = 99, analysis_label = ""){
 
 	####################### LOAD GENE EXPRESSION MATRIX ###########################
 
