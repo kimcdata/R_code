@@ -80,7 +80,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 
 		gene = bitr(gene.list, fromType="SYMBOL",toType="ENTREZID",OrgDb=organism.db)[,2]
 		str(gene)
-		if(length(gene < 1)){
+		if(length(gene) < 1){
 		
 		cat("\n\nNO GENES COULD BE CONVERTED TO ENTREZ SYMBOLS\n\n")
 		
