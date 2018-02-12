@@ -123,7 +123,7 @@ return(neighbours_length)
 
 
 
-corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathways_file, python_script_file, fdr = 0.1, alt_thresh = 0.7, results_dir = "results"){
+corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathways_file, python_script_file, fdr = 0.1, alt_thresh = 0.7, results_dir = "results", thresh_perc = F, thresh_perc_value = 99){
 
 	####################### LOAD GENE EXPRESSION MATRIX ###########################
 
@@ -183,11 +183,17 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	minimum_hits = 100
 
-	if(length(which(sig)) < minimum_hits){
-		corr_thresh = corrPercentileThresh(expr_data, perc = 99) 
-		writeLines(as.character(corr_thresh), con = paste0(results_dir, "/correlation_threshold.txt"))
+	if(thresh_perc){
+		if(length(which(sig)) < minimum_hits){
+			corr_thresh = corrPercentileThresh(expr_data, perc = 99) 
+			writeLines(as.character(corr_thresh), con = paste0(results_dir, "/absolute_correlation_threshold.txt"))
+		} else {
+			corr_thresh = min(abs(cor_mat_melt$value[sig]))
+			writeLines(as.character(corr_thresh), con = paste0(results_dir, "/FDR_",fdr,".correlation_threshold.txt"))
+		}
 	} else {
-		corr_thresh = min(abs(cor_mat_melt$value[sig]))
+		corr_thresh = corrPercentileThresh(expr_data, perc = thresh_perc_value) 
+		writeLines(as.character(corr_thresh), con = paste0(results_dir, "/absolute_correlation_threshold.",thresh_perc_value,"perc.txt"))
 	}
 
 	print ("CORRELATION THRESHOLD")
@@ -256,7 +262,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 		cat(paste0("\nPATHWAY: ",p,"\n\n"))
 
 		path_tables[[p]] = sapply(functional_profiles, function(f){
-			str(f)
+			#str(f)
 			search = f$Description == p
 			if(any(search)){
 				res = f[search,target_columns]
@@ -279,7 +285,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 		rownames(to_write) = target_genes_harm
 		str(to_write)
 
-		write.table(to_write, file = paste0(results_dir,"/Target.pathway.",p,".enrichment.scores.txt"), quote=F, sep = "\t", col.names=NA)
+		write.table(to_write, file = paste0(results_dir,"/",analysis_label,".target.pathway.",p,".enrichment.scores.txt"), quote=F, sep = "\t", col.names=NA)
 
 	}
 	
@@ -288,7 +294,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 }
 
 
-diffCorrNetWithFuncAnnot = function(gene_expression_file_A, gene_expression_file_B, target_file, target_pathways_file, python_script_file, fdr = 0.1, results_dir = "results"){
+diffCorrNetWithFuncAnnot = function(gene_expression_file_A, gene_expression_file_B, target_file, target_pathways_file, python_script_file, fdr = 0.1, results_dir = "results", analysis_label = ""){
 
 	####################### LOAD GENE EXPRESSION MATRIX ###########################
 
@@ -414,7 +420,7 @@ diffCorrNetWithFuncAnnot = function(gene_expression_file_A, gene_expression_file
 		to_write = path_tables[[p]]
 		str(to_write)
 
-		write.table(t(to_write), file = paste0(results_dir,"/Target.pathway.",p,".enrichment.scores.stxt"), quote=F, sep = "\t", col.names=NA)
+		write.table(t(to_write), file = paste0(results_dir,"/",analysis_label,".target.pathway.",p,".enrichment.scores.stxt"), quote=F, sep = "\t", col.names=NA)
 
 	}
 	
