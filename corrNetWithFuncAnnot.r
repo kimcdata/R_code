@@ -200,7 +200,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	###################### CREATE NETWORKS FROM CORRELATION MATRIX ##########################
 
-	system(paste0('python ', python_script_file,' -i ', results_dir, '/correlation_matrix.txt -o ', results_dir, '/correlation_networks.sif.txt -t ', corr_thresh))
+	system(paste0('python ', python_script_file,' -i ', results_dir, '/correlation_matrix.txt -o ', results_dir, '/correlation_networks.sif.txt -t ', corr_thresh), ignore.stdout = T)
 
 	###################### LOAD NETWORKS IN R ###########################
 

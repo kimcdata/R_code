@@ -85,7 +85,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		cat("\n\nNO GENES COULD BE CONVERTED TO ENTREZ SYMBOLS\n\n")
 		
 		result = matrix(NA, nrow = 1, ncol = 10)
-		colnames(result) = tables_colnames
+		colnames(result) = table_colnames
 		return(result)
 				
 		}
