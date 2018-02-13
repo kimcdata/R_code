@@ -131,7 +131,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 	###################### SUBSET MATRIX FOR TARGET GENES #########################
 
-	target_genes = read.delim(target_file, stringsAsFactors=F)
+	target_genes = read.delim(target_file, stringsAsFactors=F, header = F)
 	target_genes_harm = intersect(rownames(expr_data), target_genes[,1])
 
 	expr_data_subset = expr_data[target_genes_harm,]

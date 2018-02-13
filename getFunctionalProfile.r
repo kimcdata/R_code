@@ -126,6 +126,8 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		minGSSize = minGSSize,
 		maxGSSize = maxGSSize) -> ego_bp
 		
+		str(ego_bp)
+		
 		if(is.null(ego_bp)){
 		
 		ego_bp = matrix(NA, nrow = 0, ncol = 10)
@@ -146,6 +148,8 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		minGSSize = minGSSize,
 		maxGSSize = maxGSSize) -> ego_cc
 		
+		str(ego_cc)
+		
 		if(is.null(ego_cc)){
 		
 		ego_cc = matrix(NA, nrow = 0, ncol = 10)
@@ -165,6 +169,8 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		readable=TRUE,
 		minGSSize = minGSSize,
 		maxGSSize = maxGSSize) -> ego_mf
+		
+		str(ego_mf)
 		
 		if(is.null(ego_mf)){
 		
