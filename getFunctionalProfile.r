@@ -149,7 +149,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		if(is.null(ego_cc)){
 		
 		ego_cc = matrix(NA, nrow = 0, ncol = 10)
-		colnames(result) = table_colnames
+		colnames(ego_cc) = table_colnames
 		
 		}
 		
@@ -169,7 +169,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		if(is.null(ego_mf)){
 		
 		ego_mf = matrix(NA, nrow = 0, ncol = 10)
-		colnames(result) = table_colnames
+		colnames(ego_mf) = table_colnames
 		
 		}
 		
@@ -186,8 +186,8 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 			maxGSSize = maxGSSize,
 			pAdjustMethod = "BH") -> ekegg
 			cat("\n\nEKEGG\n\n")
-			str(ekegg)
-			cat("\n\nEKEGG\n\n")
+			#str(ekegg)
+			#cat("\n\nEKEGG\n\n")
 			if(is.null(ekegg)){
 				kegg = FALSE
 			}
@@ -247,6 +247,17 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		}
 		
 	}
+	
+	print("ARE ANY OF THE OBJECTS NULL?")
+	cat("BP: ")
+	cat(is.null(ego_bp))
+	cat("\nCC: ")
+	cat(is.null(ego_cc))
+	cat("\nMF: ")
+	cat(is.null(ego_mf))
+	
+	
+	
 
 	if(!is.null(ego_bp)) { ego_bp@result -> bp } else { bp = ego_bp }
 	cbind(Category = as.character(rep("BP",nrow(bp))),bp) -> bp
