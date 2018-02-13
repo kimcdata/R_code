@@ -217,6 +217,8 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 		return(neighbours)
 
 	})
+	
+	names(neighbours) = target_genes_harm
 
 	neighbours_length = sapply(neighbours, length)
 	cat("\n\nNEIGHBOURS LENGTH\n\n")
@@ -245,6 +247,8 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 
 		}
 	})
+	
+	names(functional_profiles) = target_genes_harm
 
 	save(functional_profiles, file = paste0(results_dir,"/functional.profiles.current.run.RData"))
 
