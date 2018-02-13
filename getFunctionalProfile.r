@@ -130,8 +130,8 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		
 		if(is.null(ego_bp)){
 		
-		ego_bp = matrix(NA, nrow = 0, ncol = 10)
-		colnames(ego_bp) = table_colnames
+		ego_bp_m = matrix(NA, nrow = 0, ncol = 10)
+		colnames(ego_bp_m) = table_colnames
 		
 		}
 		
@@ -152,8 +152,8 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		
 		if(is.null(ego_cc)){
 		
-		ego_cc = matrix(NA, nrow = 0, ncol = 10)
-		colnames(ego_cc) = table_colnames
+		ego_cc_m = matrix(NA, nrow = 0, ncol = 10)
+		colnames(ego_cc_m) = table_colnames
 		
 		}
 		
@@ -174,8 +174,8 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		
 		if(is.null(ego_mf)){
 		
-		ego_mf = matrix(NA, nrow = 0, ncol = 10)
-		colnames(ego_mf) = table_colnames
+		ego_mf_m = matrix(NA, nrow = 0, ncol = 10)
+		colnames(ego_mf_m) = table_colnames
 		
 		}
 		
@@ -265,13 +265,13 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 	
 	
 
-	if(!is.null(ego_bp)) { ego_bp@result -> bp } else { bp = ego_bp }
+	if(!is.null(ego_bp)) { ego_bp@result -> bp } else { bp = ego_bp_m }
 	cbind(Category = as.character(rep("BP",nrow(bp))),bp) -> bp
 
-	if(!is.null(ego_cc)) { ego_cc@result -> cc } else { cc = ego_cc }
+	if(!is.null(ego_cc)) { ego_cc@result -> cc } else { cc = ego_cc_m }
 	cbind(Category = as.character(rep("CC",nrow(cc))),cc) -> cc
 
-	if(!is.null(ego_mf)) { ego_mf@result -> mf } else { mf = ego_mf }
+	if(!is.null(ego_mf)) { ego_mf@result -> mf } else { mf = ego_mf_m }
 	cbind(Category = as.character(rep("MF",nrow(mf))),mf) -> mf
 
 	if(kegg){
