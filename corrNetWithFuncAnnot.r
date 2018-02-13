@@ -209,7 +209,7 @@ corrNetWithFuncAnnot = function(gene_expression_file, target_file, target_pathwa
 	print("NETWORKS")
 	str(networks)
 
-	neighbours = sapply(target_genes_harm, function(x){
+	neighbours = lapply(target_genes_harm, function(x){
 
 		r1 = which(networks[,1] == x)
 		r2 = which(networks[,2] == x)
