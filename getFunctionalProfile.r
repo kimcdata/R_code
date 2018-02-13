@@ -261,6 +261,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 	cat(is.null(ego_cc))
 	cat("\nMF: ")
 	cat(is.null(ego_mf))
+	cat("\n\n")
 	
 	
 	
