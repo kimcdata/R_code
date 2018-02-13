@@ -128,10 +128,6 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		
 		#str(ego_bp)
 		
-		print("EXISTS CHECK")
-		print(exists(x = 'result', where = ego_bp))
-		print("END EXISTS CHECK")
-		
 		if(is.null(ego_bp)){
 		
 		ego_bp = matrix(NA, nrow = 0, ncol = 10)
