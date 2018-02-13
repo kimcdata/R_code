@@ -126,7 +126,11 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		minGSSize = minGSSize,
 		maxGSSize = maxGSSize) -> ego_bp
 		
-		str(ego_bp)
+		#str(ego_bp)
+		
+		print("EXISTS CHECK")
+		print(exists(x = 'result', where = ego_bp))
+		print("END EXISTS CHECK")
 		
 		if(is.null(ego_bp)){
 		
@@ -148,7 +152,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		minGSSize = minGSSize,
 		maxGSSize = maxGSSize) -> ego_cc
 		
-		str(ego_cc)
+		#str(ego_cc)
 		
 		if(is.null(ego_cc)){
 		
@@ -170,7 +174,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		minGSSize = minGSSize,
 		maxGSSize = maxGSSize) -> ego_mf
 		
-		str(ego_mf)
+		#str(ego_mf)
 		
 		if(is.null(ego_mf)){
 		
