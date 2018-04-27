@@ -3,14 +3,15 @@
 fetchCoreEnrichedGenes <- function(directory, geneset){
  
   fh <- paste(geneset, ".xls",sep="")
-  print(fh)
+  #print(fh)
   dirSearch <- dir(directory, pattern=fh)
-  print(dirSearch)
+  #print(dirSearch)
+  if(fh != dirSearch) { print("MISMATCH BETWEEN FILENAME AND FILE FOUND") }
   if(length(dirSearch) == 1){
     tab <- read.delim(file.path(directory,fh),header=T,stringsAsFactors = F)
     ceg <- tab$PROBE[tab$CORE.ENRICHMENT == "Yes"]
     ceg <- paste(ceg, collapse=",")
-    print("hit")
+    #print("hit")
     return(ceg)
   } else {
     print("swing and a miss")
@@ -97,30 +98,35 @@ combineGSEARuns <- function(directory, thresh=0.05, nes = T, fdr = TRUE, coreEnr
   
 # convert each GSEA result into a matrix
   
-lapply(gsea.res, function(x){
-  pos.core.enr.vector <- rep("",length(x$nes.pos))
-  names(pos.core.enr.vector) <- names(x$nes.pos)
-  neg.core.enr.vector <- rep("", length(x$nes.neg))
-  names(neg.core.enr.vector) <- names(x$nes.neg)
-  pos.core.enr.vector[names(x$pos.core)] <- x$pos.core
-  neg.core.enr.vector[names(x$neg.core)] <- x$neg.core
-  cbind(c(x$nes.pos, x$nes.neg),c(x$fdrq.pos, x$fdrq.neg),c(pos.core.enr.vector,neg.core.enr.vector))
-}) -> gsea.res.mat
+lapply(gsea_res, function(x){
+  pos.core.enr.vector <- rep("",length(x$nes$nes.pos))
+  names(pos.core.enr.vector) <- names(x$nes$nes.pos)
+  neg.core.enr.vector <- rep("", length(x$nes$nes.neg))
+  names(neg.core.enr.vector) <- names(x$nes$nes.neg)
+  pos.core.enr.vector[names(x$coreEnrichedGenes$core.pos)] <- x$coreEnrichedGenes$core.pos
+  neg.core.enr.vector[names(x$coreEnrichedGenes$core.neg)] <- x$coreEnrichedGenes$core.neg
+  cbind(c(x$nes$nes.pos, x$nes$nes.neg),c(x$fdr$fdr.pos, x$fdr$fdr.neg),c(pos.core.enr.vector,neg.core.enr.vector))
+}) -> gsea_res_mat
   
   
 # sort each GSEA result by pathway
-lapply(gsea.res.mat, function(x)x[order(rownames(x)),]) -> gsea.res.mat
+lapply(gsea_res_mat, function(x)x[order(rownames(x)),]) -> gsea_res_mat
 
 # create column headings for the final data matrix
 rep(c("nes","fdr","enr"),length(tar)) -> ty
-paste(ty,names(tar)[expand.grid(1:3,1:length(tar))[,2]]) -> gsea.cols
+
+dir("gsea",pattern="*GseaPreranked", full.names = T) -> tar
+tar = gsub(".*/","",tar)
+names(tar) = tar
+
+paste(ty,names(tar)[expand.grid(1:3,1:length(tar))[,2]]) -> gsea_cols
 
 # combine the gsea results into one matrix
-do.call(cbind, gsea.res.mat) -> gsea.res.mat
-colnames(gsea.res.mat) <- gsea.cols
+do.call(cbind, gsea_res_mat) -> gsea_res_mat
+colnames(gsea_res_mat) <- gsea_cols
 
 # write the results to a file
-write.table(gsea.res.mat, file="gsea.merged.txt", sep="\t", quote=FALSE, col.names=NA)
+write.table(gsea_res_mat, file="gsea.merged.txt", sep="\t", quote=FALSE, col.names=NA)
   
 #### write a gmx file of the core enriched genes #####
 

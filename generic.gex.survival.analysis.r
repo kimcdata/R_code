@@ -126,7 +126,7 @@ gex_survival_getsplit <- function(survival_time, event_flag, gene_expression, mi
 ##########################################################################################################################################
 
 
-gex_survival_with_covar <- function(survival_time, event_flag, gene_expression, covariates=list(), min_group_size=10, gene.label="", data.type.label="Gene Expression", boxplot.ylab="Gene Expression", include.covar=F,plotKM=FALSE, file_prefix = ""){
+gex_survival_with_covar <- function(survival_time, event_flag, gene_expression, covariates=list(), min_group_size=10, gene.label="", data.type.label="Gene Expression", boxplot.ylab="Gene Expression", include.covar=F,plotKM=FALSE, file_prefix = "", km_xlab = "Survival - Days"){
   
   require(survival)
   require(clinfun)
@@ -146,6 +146,8 @@ gex_survival_with_covar <- function(survival_time, event_flag, gene_expression, 
   beta = coxph(surv.obj ~ gene_expression)$coefficients[1]
   beta.order = order(beta*gene_expression, decreasing=T)
   
+  print("STARTING P VALUE TESTING")
+  
   sapply(1:n_ind, function(x){
     if(x < min_group_size){
       return(1)
@@ -162,6 +164,8 @@ gex_survival_with_covar <- function(survival_time, event_flag, gene_expression, 
     }
   }) -> p.opti
   
+  print("FINISHED P VALUE TESTING")
+  
   which.min(p.opti) -> cutoff
   
   fac = rep(0, n_ind)
@@ -176,19 +180,25 @@ gex_survival_with_covar <- function(survival_time, event_flag, gene_expression, 
     form = as.formula("surv.obj ~ fac")
   }
   
+  print("STARTING SURVIVAL ANALYSIS")
+  
   cox.model = coxph(form, method="breslow", x = T)
   sf.model = survfit(form)
   
+  if(include.covar){
+  print("STARTING coxphERR")
   cox_err_cv = coxphERR(cox.model, 2:4)
   cox_err_gene = coxphERR(cox.model, 1)
   cox_err_model = coxphERR(cox.model)
   cox_err_diff = cox_err_model["ERR"] - cox_err_gene["ERR"]
-  
+  }
   
   #print("sf.model")
   #str(sf.model)
 
   cox.summ = summary(cox.model)
+  
+  print("FINISHED SURVIVAL ANALYSIS")
   
   if(include.covar){
     #print(cox.summ)
@@ -210,7 +220,7 @@ gex_survival_with_covar <- function(survival_time, event_flag, gene_expression, 
 
     plot(sf.model, 
          col=c("blue", "red"), 
-         xlab="Survival - Days", 
+         xlab=km_xlab, 
          ylab="Probability of survival", 
          main=paste("Survival analysis - ",
                     data.type.label,": ",
@@ -237,8 +247,11 @@ gex_survival_with_covar <- function(survival_time, event_flag, gene_expression, 
     
     dev.off()
   }
-  
+  if(include.covar){
   return(c(cox_err_cv = cox_err_cv, cox_err_model = cox_err_model, cox_err_gene = cox_err_gene, cox_err_diff = cox_err_diff, pv, hr))
+  } else {
+  return(c(pv = pv, hr = hr))
+  }
   
 }
 

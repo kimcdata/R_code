@@ -30,7 +30,7 @@
 # "zebrafish"
 #
 # organism.db = the bioconductor library containing annotation information for your species, mouse = "org.Mm.eg.db", human = "org.Hs.eg.db", zebrafish = "org.Dr.eg.db", worm (elegans) = "org.Ce.eg.db"
-# golevels = TRUE/FALSE, if true the distance (level) from each GO term to the "root" of the Gene Ontology tree will be calculated, will take 5-10 minutes for a standard size gene list (500-1000 genes)
+# golevels = TRUE/FALSE, if true the distance (level) from each GO term to the "root" of the Gene Ontology tree will be calculated, will take 5-10 minutes for a standard size gene list (500-1000 genes), using pvalue = 1 and qvalue = 1
 # writeTable = TRUE/FALSE, if true the data will be written to a tab delimitted text file
 # filename = the name of the file written when writeTable = TRUE
 # pvalue = threshold for selecting significant GO and KEGG terms (adjusted for multiple testing)
@@ -42,8 +42,8 @@
 # To retreive the full Gene Ontology and KEGG analysis, leave both 'pvalue' and 'qvalue' as 1.
 
 #set organism
-#organism <- "human"
-#organism.db <- "org.Hs.eg.db"
+organism <- "human"
+organism.db <- "org.Hs.eg.db"
 
 #set organism
 #organism <- "mouse"

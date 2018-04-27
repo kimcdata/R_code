@@ -35,7 +35,7 @@ tsvToXlsx = function(tsv_files, worksheet_names, xlsx_filename = "workbook.xlsx"
   }
   
   
-  saveWorkbook(wb = wb, file = xlsx_filename)
+  saveWorkbook(wb = wb, file = paste0(xlsx_filename, ".xlsx"))
   
   return("Written to file")
   

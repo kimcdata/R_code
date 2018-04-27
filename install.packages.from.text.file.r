@@ -1,6 +1,6 @@
 ########## INSTALL PACKAGES FROM TEXT FILE ##############
 
-installPackagesTxt = function(file, nomultiarch = TRUE, ask = F, repos = 1:10){
+installPackagesTxt = function(file, nomultiarch = TRUE, ask = F, repos = 1:4){
   
   pkgs = readLines(file)
   pkgs = pkgs[-c(grep("^#",pkgs))]
