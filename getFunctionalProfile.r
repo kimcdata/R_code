@@ -254,7 +254,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 		
 	}
 	
-	print("ARE ANY OF THE OBJECTS NULL?")
+	print("ARE ANY OF THE OBJECTS EMPTY?")
 	cat("BP: ")
 	cat(is.null(ego_bp))
 	cat("\nCC: ")
