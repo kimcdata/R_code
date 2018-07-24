@@ -71,6 +71,7 @@ getFunctionalProfile <- function(gene.list, universe, organism = organism, organ
 
 	library(clusterProfiler)
 	library(GO.db)
+  require(dplyr)
 	eval(parse(text=paste("require(",organism.db,")",sep="")))
 	table_colnames =  c("Category","ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count")
 
@@ -350,6 +351,8 @@ distance_to_root <- function(goterm, ont, jumps=0){
 bitr2 = function (geneID, fromType, toType, OrgDb, drop = TRUE) 
 {
 	require(GOSemSim)
+  require(dplyr)
+  select = AnnotationDbi::select
 	idTypes <- idType(OrgDb)
 	msg <- paste0("should be one of ", paste(idTypes, collapse = ", "), 
 	".")
