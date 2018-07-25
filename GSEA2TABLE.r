@@ -96,6 +96,9 @@ combineGSEARuns <- function(directory, thresh=0.05, nes = T, fdr = TRUE, coreEnr
   
 }
   
+
+gsea_res = combineGSEARuns(directory = ".", thresh = 0.1)
+
 # convert each GSEA result into a matrix
   
 lapply(gsea_res, function(x){
@@ -112,12 +115,13 @@ lapply(gsea_res, function(x){
 # sort each GSEA result by pathway
 lapply(gsea_res_mat, function(x)x[order(rownames(x)),]) -> gsea_res_mat
 
-# create column headings for the final data matrix
-rep(c("nes","fdr","enr"),length(tar)) -> ty
 
-dir("gsea",pattern="*GseaPreranked", full.names = T) -> tar
+dir(".",pattern="*GseaPreranked", full.names = T) -> tar
 tar = gsub(".*/","",tar)
 names(tar) = tar
+
+# create column headings for the final data matrix
+rep(c("nes","fdr","enr"),length(tar)) -> ty
 
 paste(ty,names(tar)[expand.grid(1:3,1:length(tar))[,2]]) -> gsea_cols
 
@@ -128,6 +132,19 @@ colnames(gsea_res_mat) <- gsea_cols
 # write the results to a file
 write.table(gsea_res_mat, file="gsea.merged.txt", sep="\t", quote=FALSE, col.names=NA)
   
+# Convert the results to a network format
+
+gsea_df = as.data.frame(gsea_res_mat, stringsAsFactors = F)
+
+con_stats = gsea_df %>% select(matches("fdr|nes")) %>% t %>% as.data.frame(stringsAsFactors=F) %>% rownames_to_column('gsea_run') 
+genes = strcapture("\\s(.+)\\.+GseaPreranked",con_stats$gsea_run,proto = list(gene = character()))$gene
+con_stats = con_stats %>% mutate(gene = genes)
+fdr_melt = melt(con_stats %>% filter(grepl("fdr", gsea_run)), id = c("gene"), variable.factor = F, value.factor = F, measure.var = grep("gsea_run|^gene$", colnames(con_stats), value = T, inver = T))
+nes_melt = melt(con_stats %>% filter(grepl("nes", gsea_run)), id = c("gene"), variable.factor = F, value.factor = F, measure.var = grep("gsea_run|^gene$", colnames(con_stats), value = T, invert = T))
+network = merge(x = fdr_melt, y = nes_melt, by = c("gene", "variable"), suffixes = c("_fdr","_nes"))
+write.table(network, file = paste0("GSEA.network.sif.txt"), sep="\t", quote=F, col.names = T, row.names=F)
+
+
 #### write a gmx file of the core enriched genes #####
 
 core.list <- lapply(gsea.res, function(x){
