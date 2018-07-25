@@ -97,6 +97,10 @@ combineGSEARuns <- function(directory, thresh=0.05, nes = T, fdr = TRUE, coreEnr
 }
   
 
+
+####### END FUNCTIONS ######
+####### START SCRIPT ######
+
 gsea_res = combineGSEARuns(directory = ".", thresh = 0.1)
 
 # convert each GSEA result into a matrix
