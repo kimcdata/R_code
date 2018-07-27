@@ -57,7 +57,8 @@ networkJaccardHeatmap = function(jaccMat, filter = T, filterValue = 0.5){
   str(sel)
   jaccMat = jaccMat[sel,sel]
   
-  heatmap.2(jaccMat, trace="none", col = bluered(50), mar=c(12,12), hclustfun = function(x)hclust(x, "average"), distfun = function(x)as.dist(1-cor(t(x))))
+  hm = heatmap.2(jaccMat, trace="none", col = bluered(50), mar=c(12,12), hclustfun = function(x)hclust(x, "average"), distfun = function(x)as.dist(1-cor(t(x))), breaks = seq(0,1,length.out=51), cexRow = 0.5)
+  return(hm)
    
 }
 
@@ -67,7 +68,7 @@ sif = read.delim("Lymph.KEGG.GSEA.network.sif.txt",stringsAsFactors = F)
 sif = thresholdSif(sif, 0.01, 3, abs = F, mode = "lt")
 sif = thresholdSif(sif, 2, 4, abs = T, mode = "gt")
 
-vids = read.delim("jaccard.index.targets.txt", header = F, stringsAsFactors = F)[,1]
+vids = read.delim("jaccard.index.targets2-rnk.hubs.txt", header = F, stringsAsFactors = F)[,1]
 s = networkJaccard(sif, vids)
-write.table(s, file = "lymph.network.neighbourhood.jaccard.matrix.txt", sep="\t", quote = F, col.names = NA)
-networkJaccardHeatmap(s)
+#write.table(s, file = "Blood.network.neighbourhood.jaccard.matrix.txt", sep="\t", quote = F, col.names = NA)
+hm = networkJaccardHeatmap(s, filterValue = 0.5)
